@@ -12,24 +12,24 @@ import java.util.List;
 /**
  * 基于通用MyBatis Mapper插件的Service接口的实现
  */
-public abstract class AbstractService<T> implements Service<T> {
+public abstract class BaseServiceImpl<T> implements IBaseService<T> {
 
     @Autowired
     protected Mapper<T> mapper;
 
     private Class<T> modelClass;    // 当前泛型真实类型的Class
 
-    public AbstractService() {
+    public BaseServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
 
-    public void save(T model) {
-        mapper.insertSelective(model);
+    public int save(T model) {
+        return mapper.insertSelective(model);
     }
 
-    public void save(List<T> models) {
-        mapper.insertList(models);
+    public int save(List<T> models) {
+        return mapper.insertList(models);
     }
 
     public void deleteById(Integer id) {
