@@ -4,7 +4,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "sys_account")
-public class SysAccount {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -152,5 +152,20 @@ public class SysAccount {
      */
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", nickname='" + nickname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", status=" + status +
+                ", createat=" + createat +
+                ", ip='" + ip + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

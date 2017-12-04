@@ -11,11 +11,13 @@ import javax.annotation.Resource;
 
 
 /**
- * 业务实现类
- * Created by ${author} on ${date}.
- */
+* 业务实现类
+*
+* @author ${author}
+* @date ${date}
+*/
 @Service
-@Transactional
+@Transactional(rollbackFor = Exception.class)
 public class ${modelNameUpperCamel}ServiceImpl extends BaseServiceImpl<${modelNameUpperCamel}> implements ${modelNameUpperCamel}Service {
     @Resource
     private ${modelNameUpperCamel}Mapper ${modelNameLowerCamel}Mapper;

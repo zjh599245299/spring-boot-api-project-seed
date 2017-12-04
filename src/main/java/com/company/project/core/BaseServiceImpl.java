@@ -17,33 +17,42 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Autowired
     protected Mapper<T> mapper;
 
-    private Class<T> modelClass;    // 当前泛型真实类型的Class
+    /**
+     * 当前泛型真实类型的Class
+     */
+    private Class<T> modelClass;
 
     public BaseServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
     }
 
+    @Override
     public int save(T model) {
         return mapper.insertSelective(model);
     }
 
+    @Override
     public int save(List<T> models) {
         return mapper.insertList(models);
     }
 
+    @Override
     public void deleteById(Integer id) {
         mapper.deleteByPrimaryKey(id);
     }
 
+    @Override
     public void deleteByIds(String ids) {
         mapper.deleteByIds(ids);
     }
 
+    @Override
     public void update(T model) {
         mapper.updateByPrimaryKeySelective(model);
     }
 
+    @Override
     public T findById(Integer id) {
         return mapper.selectByPrimaryKey(id);
     }
@@ -61,14 +70,17 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
         }
     }
 
+    @Override
     public List<T> findByIds(String ids) {
         return mapper.selectByIds(ids);
     }
 
+    @Override
     public List<T> findByCondition(Condition condition) {
         return mapper.selectByCondition(condition);
     }
 
+    @Override
     public List<T> findAll() {
         return mapper.selectAll();
     }

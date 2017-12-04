@@ -15,7 +15,9 @@ import java.util.List;
 
 /**
 * 控制器类
-* Created by ${author} on ${date}.
+*
+* @author ${author}
+* @date ${date}
 */
 @RestController
 @RequestMapping("${baseRequestMapping}")
@@ -48,7 +50,7 @@ public class ${modelNameUpperCamel}Controller {
     }
 
     @PostMapping("/list")
-    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "0") Integer size) {
+    public Result list(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size) {
         PageHelper.startPage(page, size);
         List<${modelNameUpperCamel}> list = ${modelNameLowerCamel}Service.findAll();
         PageInfo pageInfo = new PageInfo(list);

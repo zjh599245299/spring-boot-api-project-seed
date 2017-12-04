@@ -1,6 +1,7 @@
 import com.google.common.base.CaseFormat;
 import freemarker.template.TemplateExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Strings;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
@@ -37,13 +38,14 @@ public class CodeGenerator {
     private static final String DATE = new SimpleDateFormat("yyyy/MM/dd").format(new Date());//@date
 
     public static void main(String[] args) {
-        genCode("sys_account");
+        genCodeByCustomModelName("sys_account", "Account");
         //genCodeByCustomModelName("输入表名","输入自定义Model名称");
     }
 
     /**
      * 通过数据表名称生成代码，Model 名称通过解析数据表名称获得，下划线转大驼峰的形式。
      * 如输入表名称 "t_user_detail" 将生成 TUserDetail、TUserDetailMapper、TUserDetailService ...
+     *
      * @param tableNames 数据表名称...
      */
     public static void genCode(String... tableNames) {
@@ -55,6 +57,7 @@ public class CodeGenerator {
     /**
      * 通过数据表名称，和自定义的 Model 名称生成代码
      * 如输入表名称 "t_user_detail" 和自定义的 Model 名称 "User" 将生成 User、UserMapper、UserService ...
+     *
      * @param tableName 数据表名称
      * @param modelName 自定义的 Model 名称
      */
@@ -102,7 +105,7 @@ public class CodeGenerator {
 
         TableConfiguration tableConfiguration = new TableConfiguration(context);
         tableConfiguration.setTableName(tableName);
-        if (StringUtils.isNotEmpty(modelName))tableConfiguration.setDomainObjectName(modelName);
+        if (StringUtils.isNotEmpty(modelName)) tableConfiguration.setDomainObjectName(modelName);
         tableConfiguration.setGeneratedKey(new GeneratedKey("id", "Mysql", true, null));
         context.addTableConfiguration(tableConfiguration);
 
@@ -171,7 +174,8 @@ public class CodeGenerator {
             data.put("date", DATE);
             data.put("author", AUTHOR);
             String modelNameUpperCamel = StringUtils.isEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
-            data.put("baseRequestMapping", modelNameConvertMappingPath(modelNameUpperCamel));
+            String baseRequestPath = modelNameConvertMappingPath(modelNameUpperCamel);
+            data.put("baseRequestMapping", baseRequestPath);
             data.put("modelNameUpperCamel", modelNameUpperCamel);
             data.put("modelNameLowerCamel", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, modelNameUpperCamel));
             data.put("basePackage", BASE_PACKAGE);

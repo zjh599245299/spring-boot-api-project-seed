@@ -1,10 +1,12 @@
-package com.company.project.task;
+package com.company.project.core;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
 /**
  * 定时任务管理类
+ *
+ * @author zhoujh
  */
 public class QuartzManager {
     private static String JOB_GROUP_NAME = "EXTJWEB_JOBGROUP_NAME";
@@ -13,9 +15,12 @@ public class QuartzManager {
     private static void quartzRemoveJob(TriggerKey triggerKey, JobKey jobKey) {
         try {
             Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
-            sched.pauseTrigger(triggerKey);// 停止触发器
-            sched.unscheduleJob(triggerKey);// 移除触发器
-            sched.deleteJob(jobKey);// 删除任务
+            // 停止触发器
+            sched.pauseTrigger(triggerKey);
+            // 移除触发器
+            sched.unscheduleJob(triggerKey);
+            // 删除任务
+            sched.deleteJob(jobKey);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +43,7 @@ public class QuartzManager {
             // 触发器名,触发器组
             Trigger trigger = TriggerBuilder.newTrigger().withIdentity(jobName, TRIGGER_GROUP_NAME).withSchedule(cron).build();
             sched.scheduleJob(jobDetail, trigger);
-            // 启动  
+            // 启动
             if (!sched.isShutdown()) {
                 sched.start();
             }
@@ -57,7 +62,6 @@ public class QuartzManager {
      * @param jobClass         任务
      * @param time             时间设置，参考quartz说明文档
      */
-    @SuppressWarnings("unchecked")
     public static void addJob(String jobName, String jobGroupName,
                               String triggerName, String triggerGroupName, Class jobClass,
                               String time) {
@@ -72,6 +76,10 @@ public class QuartzManager {
                     .withIdentity(triggerName, triggerGroupName)
                     .withSchedule(cron).build();
             sched.scheduleJob(jobDetail, trigger);
+            // 启动
+            if (!sched.isShutdown()) {
+                sched.start();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +91,6 @@ public class QuartzManager {
      * @param jobName 触发器名称（默认与job名称一致）
      * @param time    新的触发时间
      */
-    @SuppressWarnings("unchecked")
     public static void modifyJobTime(String jobName, String time) {
         try {
             Scheduler sched = StdSchedulerFactory.getDefaultScheduler();
